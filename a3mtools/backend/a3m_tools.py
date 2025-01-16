@@ -1,41 +1,5 @@
 from pathlib import Path
-
-
-class ProteinSequence:
-    def __init__(self, header: str, sequence: str):
-        self.header = header
-        self.seq_str = sequence
-
-    def __str__(self):
-        return f">{self.header}\n{self.seq_str}"
-
-    def __repr__(self):
-        return f">{self.header}\n{self.seq_str}"
-
-    def __len__(self):
-        return len(self.seq_str)
-
-    def __getitem__(self, index):
-        """This should allow for slicing of the sequence"""
-        return ProteinSequence(self.header, self.seq_str[index])
-
-    def __add__(self, other):
-        """This should allow for concatenation of the sequence"""
-        if isinstance(other, ProteinSequence):
-            return ProteinSequence(self.header, self.seq_str + other.seq_str)
-        elif isinstance(other, str):
-            return ProteinSequence(self.header, self.seq_str + other)
-        else:
-            raise TypeError(f"Cannot concatenate ProteinSequence with {type(other)}")
-
-    def __radd__(self, other):
-        """This should allow for concatenation of the sequence"""
-        if isinstance(other, ProteinSequence):
-            return ProteinSequence(self.header, other.seq_str + self.seq_str)
-        elif isinstance(other, str):
-            return ProteinSequence(self.header, other + self.seq_str)
-        else:
-            raise TypeError(f"Cannot concatenate ProteinSequence with {type(other)}")
+from a3mtools.backend.sequence_utils import ProteinSequence
 
 
 def parse_header(header_line: str):
