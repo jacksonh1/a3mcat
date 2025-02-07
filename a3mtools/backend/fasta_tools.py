@@ -3,42 +3,74 @@ import a3mtools.backend.sequence_utils as utils
 from pathlib import Path
 from a3mtools.backend.a3m_tools import MSAa3m
 import collections
-# from Bio import Align, AlignIO, Seq, SeqIO
-# from Bio.SeqRecord import SeqRecord
+from Bio import Align, AlignIO, Seq, SeqIO
+from Bio.SeqRecord import SeqRecord
 # I am using the biopython fasta parser b/c it is so robust
 # it seems weird to do this however because I am using my own ProteinSequence class
 
-# def read_fasta_entry(handle):
-#     header = handle.readline().rstrip()
-#     if header == '': # skip empty lines
-#         read_fasta_entry(handle)
-#     if header != '' and not header.startswith('>'):
-#         raise ValueError('Header line in FASTA should begin with >, instead saw:'+header)
-#     sequence = handle.readline().rstrip()
-#     return header,sequence
+class FastaImporter:
+    """import fasta file and return seqrecord objects in various formats
 
+    Parameters
+    ----------
+    fasta_path : str
+        file path to fasta file
+    """
 
-def read_lines_and_strip(handle):
-    return [line.strip() for line in handle.readlines() if line.strip()]
+    def __init__(self, fasta_path: str | Path):
+        self.fasta_path = fasta_path
 
+    def import_as_list(self) -> list[SeqRecord]:
+        """return list of SeqRecord objects for each sequence in the fasta file
 
-def parse_fasta(handle):
-    lines = read_lines_and_strip(handle)
-    for i in range(0, len(lines), 2):
-        header = lines[i].rstrip()
-        if not header.startswith('>'):
-            raise ValueError(f'Header line in FASTA should begin with >, instead saw: {header} at line {i}')
-        if lines[i + 1].startswith('>'):
-            raise ValueError(f'Expected sequence line after header ({header}), instead saw: {lines[i + 1]} at line {i + 1}')
-        sequence = lines[i + 1]
-        yield ProteinSequence(header[1:], sequence)
+        Returns
+        -------
+        List[SeqRecord]
+            list of SeqRecord objects
+        """
+        with open(self.fasta_path) as handle:
+            return list(SeqIO.parse(handle, "fasta"))
+
+    def import_as_dict(self) -> dict[str, SeqRecord]:
+        """return dictionary of SeqRecord objects for each sequence in the fasta file
+
+        Returns
+        -------
+        dict[str, SeqRecord]
+            dictionary of SeqRecord objects, keys are the sequence ids and values are the SeqRecord objects
+        """
+        with open(self.fasta_path) as handle:
+            return SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
+
+    def import_as_str_dict(self) -> dict[str, str]:
+        """return dictionary of strings for each sequence in the fasta file
+
+        Returns
+        -------
+        dict[str, str]
+            dictionary of sequence strings, keys are the sequence ids and values are the sequences as strings
+        """
+        with open(self.fasta_path) as handle:
+            d = SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
+        return {k: str(v.seq) for k, v in d.items()}
+
+    def import_as_alignment(self) -> Align.MultipleSeqAlignment:
+        """return multiple sequence alignment object
+
+        Returns
+        -------
+        Align.MultipleSeqAlignment
+            multiple sequence alignment object
+        """
+        with open(self.fasta_path) as handle:
+            return AlignIO.read(handle, "fasta")
 
 
 def import_fasta(filepath):
-    with open(filepath) as handle:
-        return list(parse_fasta(handle))
-
-
+    faimporter = FastaImporter(filepath)
+    seqrecord_list = faimporter.import_as_list()
+    return [ProteinSequence(seq.id, str(seq.seq)) for seq in seqrecord_list]
+ 
 
 class MSAfasta:
 
@@ -132,7 +164,8 @@ class MSAfasta:
         """        
         aligned_query = [i for i in self.sequences if i.header == query_header][0]
         unaligned_query, inds = utils.reindex_alignment_str(aligned_query.seq_str)
-        query = ProteinSequence(aligned_query.header, unaligned_query)
+        # query = ProteinSequence(aligned_query.header, unaligned_query)
+        query = ProteinSequence('101', unaligned_query)
         new_seqs = []
         for pseq in self.sequences:
             if pseq.header == aligned_query.header:
@@ -153,38 +186,28 @@ class MSAfasta:
             handle.write(str(self))
 
 
-class FastaImporter:
-    """import fasta file and return seqrecord objects in various formats
 
-    Parameters
-    ----------
-    fasta_path : str
-        file path to fasta file
-    """
 
-    def __init__(self, fasta_path: str | Path):
-        self.fasta_path = fasta_path
 
-    def import_as_list(self) -> list[ProteinSequence]:
-        """return list of SeqRecord objects for each sequence in the fasta file
 
-        Returns
-        -------
-        List[ProteinSequence]
-            list of ProteinSequence objects
-        """
-        return import_fasta(self.fasta_path)
+# def read_lines_and_strip(handle):
+#     return [line.strip() for line in handle.readlines() if line.strip()]
 
-    def import_as_dict(self) -> dict[str, str]:
-        """return dictionary of header:sequence for each sequence in the fasta file
 
-        Returns
-        -------
-        dict[str, str]
-            dictionary of sequences, keys are the sequence ids and values are the sequences as strings
-        """
-        seqs = self.import_as_list()
-        return {seq.header: seq.seq_str for seq in seqs}
+# def parse_fasta(handle):
+#     lines = read_lines_and_strip(handle)
+#     for i in range(0, len(lines), 2):
+#         header = lines[i].rstrip()
+#         if not header.startswith('>'):
+#             raise ValueError(f'Header line in FASTA should begin with >, instead saw: {header} at line {i}')
+#         if lines[i + 1].startswith('>'):
+#             raise ValueError(f'Expected sequence line after header ({header}), instead saw: {lines[i + 1]} at line {i + 1}')
+#         sequence = lines[i + 1]
+#         yield ProteinSequence(header[1:], sequence)
 
+
+# def import_fasta(filepath):
+#     with open(filepath) as handle:
+#         return list(parse_fasta(handle))
 
 
