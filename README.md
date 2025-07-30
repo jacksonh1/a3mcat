@@ -2,11 +2,20 @@
 
 Tools for working with a3m files. Designed to help generate input for structure prediction tools like alphafold. 
 
+```
+>meow
+---------/\_/\--
+--------( o.o )-
+--------- >^< --
+```
+
 **Main features:**
 - import a3m files from MMseqs2 search results into python objects
 - Easily slice MSAs while preserving insertions
-- Combine multiple MSAs into a single a3m file for complex prediction
+- Easily combine multiple MSAs into a single a3m file for complex prediction
 - Save manipulated MSAs to new a3m files
+- convert from fasta to a3m
+- coming soon: convert from a3m to fasta
 
 <!-- Provides a method to easily slice a3m MSAs while preserving insertions. <br>Also allows you to concatenate MSAs into a single a3m file for complex prediction. -->
 
@@ -63,6 +72,7 @@ When slicing or combining MSAs, insertions are maintained (see output of example
 
 ## Usage
 There will eventually be a more complete guide. But for now, you can install the package and run the following code to see some of the basic functionality. <br>
+See the demo notebook ([demo.ipynb](./demo/demo.ipynb)) for additional examples and usage. <br>
 
 
 ```python
@@ -180,6 +190,71 @@ complex_msa = msa + msa2
 complex_msa.save("example_complex.a3m")
 ```
 
+### creating an empty MSAa3m object
+```python
+empty_msa = a3mtools.MSAa3m.empty_MSA('ABCDEFG')
+print(empty_msa)
+```
+```
+#7	1
+>101
+ABCDEFG
+>101
+ABCDEFG
+```
+
+notice that there are 2 query sequences in the empty MSAa3m object. This is to mimic the colabfold behavior. I do not know if this is actually necessary or not.<br>
+
+### importing a fasta file
+```python
+fasta_msa = a3mtools.MSAfasta.from_fasta_file(examples.fasta_file1)
+print(fasta_msa)
+```
+```
+>q
+LVT---FLAGCQ---
+>a
+LVTTTTFL--CQQQQ
+>b
+LVTTTTFLAGCQQQQ
+>c
+LVT---FLAGCQQQQ
+```
+
+### convert MSAfasta to MSAa3m
+To convert a fasta to an a3m, you have to select a query sequence, since a3m files are all formatted relative to a query sequence. <br>
+```python
+y = fasta_msa.to_a3m(query_header="q")
+print(y)
+```
+```
+#9	1
+>101
+LVTFLAGCQ
+>a
+LVTtttFL--CQqqq
+>b
+LVTtttFLAGCQqqq
+>c
+LVTFLAGCQqqq
+```
+notice the difference in formatting when we choose a different query sequence:
+```python
+y = fasta_msa.to_a3m(query_header="a")
+print(y)
+```
+```
+#13	1
+>101
+LVTTTTFLCQQQQ
+>q
+LVT---FLagCQ---
+>b
+LVTTTTFLagCQQQQ
+>c
+LVT---FLagCQQQQ
+```
+
 ## important notes
 - slice numbering is relative to the **query sequence**
 - query sequence is always the first sequence in the MSA, and is named 101 or some combination of concatenated querys if the MSA is the result of concatenation (e.g. 101\t102)
@@ -192,7 +267,8 @@ complex_msa.save("example_complex.a3m")
 ---
 - [ ] documentation on readthedocs
   - [ ] examples and code
-- [ ] convert between fasta and a3m and back
+- [x] convert between fasta and a3m
+- [ ] convert between a3m and fasta
 - [ ] allow for more generic naming of query sequence
 - [ ] add better test functions
 - [ ] an option for combining MSAs in paired format

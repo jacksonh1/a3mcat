@@ -69,6 +69,13 @@ class MSAa3m:
         return msa_str
 
     @classmethod
+    def empty_MSA(cls, sequence: str, header: str = "101"):
+        """Create an empty MSAa3m object with a single query sequence"""
+        query = ProteinSequence(header, sequence)
+        info_line = f"#{len(query.seq_str)}\t1"
+        return cls(info_line, query, [query])
+
+    @classmethod
     def from_a3m_file(cls, file_path: Path | str):
         """Create an MSAa3m object from an a3m file
 
@@ -81,7 +88,7 @@ class MSAa3m:
         -------
         MSAa3m
             a a3mtools.MSAa3m object
-        """        
+        """
         info_line, query, sequences = import_a3m(file_path)
         return cls(info_line, query, sequences)
 

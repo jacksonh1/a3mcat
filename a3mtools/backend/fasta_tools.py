@@ -121,10 +121,16 @@ class MSAfasta:
             for seq1 in self.sequences:
                 new_seqs.append(seq1 + other_dict[seq1.header])
             return MSAfasta(new_seqs)
-        elif isinstance(other, ProteinSequence):
-            return MSAfasta(self.sequences + [other])
+        # elif isinstance(other, ProteinSequence):
+        #     return MSAfasta(self.sequences + [other])
         else:
             raise TypeError(f"Cannot concatenate MSAfasta with {type(other)}")
+
+    def append(self, other):
+        if isinstance(other, ProteinSequence):
+            return MSAfasta(self.sequences + [other])
+        else:
+            raise TypeError(f"Cannot append {type(other)} to MSAfasta")
 
     @classmethod
     def from_fasta_file(cls, file_path: Path | str):
