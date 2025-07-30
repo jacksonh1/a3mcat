@@ -6,22 +6,22 @@ Unit and regression test for the pairk package.
 import sys
 import pytest
 
-import a3mtools
-import a3mtools.examples as examples
+import a3mcat
+import a3mcat.examples as examples
 
-def test_a3mtools_imported():
+def test_a3mcat_imported():
     """Sample test, will always pass so long as import statement worked."""
-    assert "a3mtools" in sys.modules
+    assert "a3mcat" in sys.modules
 
 # # import an a3m file
-# msa = a3mtools.MSAa3m.from_a3m_file(examples.a3m_file1)
+# msa = a3mcat.MSAa3m.from_a3m_file(examples.a3m_file1)
 # print(msa)
 
 # # slicing the alignment
 # print(msa[2:5])
 
 # # concatenating alignments
-# msa2 = a3mtools.MSAa3m.from_a3m_file(examples.a3m_file2)
+# msa2 = a3mcat.MSAa3m.from_a3m_file(examples.a3m_file2)
 # print(msa2)
 # print(msa + msa2)
 # print(msa + msa2 + msa)

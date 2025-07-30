@@ -1,7 +1,7 @@
-from a3mtools.backend.sequence_utils import ProteinSequence
-import a3mtools.backend.sequence_utils as utils
+from a3mcat.backend.sequence_utils import ProteinSequence
+import a3mcat.backend.sequence_utils as utils
 from pathlib import Path
-from a3mtools.backend.a3m_tools import MSAa3m
+from a3mcat.backend.a3m_tools import MSAa3m
 import collections
 from Bio import Align, AlignIO, Seq, SeqIO
 from Bio.SeqRecord import SeqRecord
@@ -144,7 +144,7 @@ class MSAfasta:
         Returns
         -------
         MSAfasta
-            an a3mtools.MSAfasta object
+            an a3mcat.MSAfasta object
         """        
         sequences = import_fasta(file_path)
         return cls(sequences)
@@ -165,7 +165,7 @@ class MSAfasta:
 
         Returns
         -------
-        a3mtools.backend.a3m_tools.MSAa3m
+        a3mcat.backend.a3m_tools.MSAa3m
             a MSAa3m object with the newly formatted sequences
         """        
         aligned_query = [i for i in self.sequences if i.header == query_header][0]

@@ -1,4 +1,4 @@
-# a3mtools
+# a3mcat
 
 Tools for working with a3m files. Designed to help generate input for structure prediction tools like alphafold. 
 
@@ -23,13 +23,13 @@ If you have any questions, find any issues/bugs, or have suggestions, please ope
 
 ## Installation
 ```bash
-pip install a3mtools
+pip install a3mcat
 ```
 
 or if you want an editable version:
 ```bash
-git clone https://github.com/jacksonh1/a3mtools.git
-cd a3mtools
+git clone https://github.com/jacksonh1/a3mcat.git
+cd a3mcat
 pip install -e .
 ```
 
@@ -76,13 +76,13 @@ See the demo notebook ([demo.ipynb](./demo/demo.ipynb)) for additional examples 
 
 
 ```python
-import a3mtools
-import a3mtools.examples as examples # examples that come installed with a3mtools
+import a3mcat
+import a3mcat.examples as examples # examples that come installed with a3mcat
 ```
 
 ### import an a3m file
 ```python
-msa = a3mtools.MSAa3m.from_a3m_file(examples.a3m_file1)
+msa = a3mcat.MSAa3m.from_a3m_file(examples.a3m_file1)
 print(msa)
 ```
 
@@ -97,7 +97,7 @@ A--DxxE-GHIxxxx
 >ortho3
 ----xxEFGH-
 ```
-The input to the `a3mtools.MSAa3m.from_a3m_file` function is the path to an a3m file.
+The input to the `a3mcat.MSAa3m.from_a3m_file` function is the path to an a3m file.
 
 ### slicing the alignment
 ```python
@@ -117,7 +117,7 @@ CDxxE
 
 ### concatenating alignments
 ```python
-msa2 = a3mtools.MSAa3m.from_a3m_file(examples.a3m_file2)
+msa2 = a3mcat.MSAa3m.from_a3m_file(examples.a3m_file2)
 print(msa2)
 ```
 ```
@@ -192,7 +192,7 @@ complex_msa.save("example_complex.a3m")
 
 ### creating an empty MSAa3m object
 ```python
-empty_msa = a3mtools.MSAa3m.empty_MSA('ABCDEFG')
+empty_msa = a3mcat.MSAa3m.empty_MSA('ABCDEFG')
 print(empty_msa)
 ```
 ```
@@ -207,7 +207,7 @@ notice that there are 2 query sequences in the empty MSAa3m object. This is to m
 
 ### importing a fasta file
 ```python
-fasta_msa = a3mtools.MSAfasta.from_fasta_file(examples.fasta_file1)
+fasta_msa = a3mcat.MSAfasta.from_fasta_file(examples.fasta_file1)
 print(fasta_msa)
 ```
 ```

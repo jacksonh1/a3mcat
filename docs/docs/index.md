@@ -1,4 +1,4 @@
-# a3mtools documentation!
+# a3mcat documentation!
 
 ## Description
 

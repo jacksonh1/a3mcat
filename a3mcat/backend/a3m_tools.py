@@ -1,5 +1,5 @@
 from pathlib import Path
-from a3mtools.backend.sequence_utils import ProteinSequence
+from a3mcat.backend.sequence_utils import ProteinSequence
 
 
 def parse_header(header_line: str):
@@ -87,7 +87,7 @@ class MSAa3m:
         Returns
         -------
         MSAa3m
-            a a3mtools.MSAa3m object
+            a a3mcat.MSAa3m object
         """
         info_line, query, sequences = import_a3m(file_path)
         return cls(info_line, query, sequences)

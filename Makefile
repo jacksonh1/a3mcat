@@ -2,7 +2,7 @@
 # GLOBALS                                                                       #
 #################################################################################
 
-PROJECT_NAME = a3mtools
+PROJECT_NAME = a3mcat
 PYTHON_VERSION = 3.10
 PYTHON_INTERPRETER = python
 
@@ -26,14 +26,14 @@ clean:
 ## Lint using flake8 and black (use `make format` to do formatting)
 .PHONY: lint
 lint:
-	flake8 a3mtools
-	isort --check --diff --profile black a3mtools
-	black --check --config pyproject.toml a3mtools
+	flake8 a3mcat
+	isort --check --diff --profile black a3mcat
+	black --check --config pyproject.toml a3mcat
 
 ## Format source code with black
 .PHONY: format
 format:
-	black --config pyproject.toml a3mtools
+	black --config pyproject.toml a3mcat
 
 
 ## Set up python interpreter environment
@@ -60,7 +60,7 @@ create_test_environment:
 ## Make Dataset
 .PHONY: data
 data: requirements
-	$(PYTHON_INTERPRETER) a3mtools/dataset.py
+	$(PYTHON_INTERPRETER) a3mcat/dataset.py
 
 
 #################################################################################

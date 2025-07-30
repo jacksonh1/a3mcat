@@ -1,4 +1,4 @@
-name: a3mtools
+name: a3mcat
 channels:
   - conda-forge
 dependencies:
