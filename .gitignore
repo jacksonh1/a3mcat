@@ -5,6 +5,7 @@ temp/
 
 .stignore
 .stfolder/
+.mutagenignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
